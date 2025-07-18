@@ -4,7 +4,7 @@ const cors = require('cors')
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-const allowedOrigins = ['http://localhost:3000', 'https://messaging-app-henna-kappa.vercel.app/'];
+const allowedOrigins = ['http://localhost:3000', process.env.FRONTEND_URL];
 
 app.use(cors({
   origin: function (origin, callback) {
