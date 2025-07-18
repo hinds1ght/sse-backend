@@ -21,6 +21,8 @@ const clients = new Map();
 
 app.get('/stream/:conversationId', (req, res) => {
   const { conversationId } = req.params;
+  
+  console.log(`New SSE connection for conversation ${conversationId}`);
 
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
