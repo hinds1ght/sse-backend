@@ -1,4 +1,3 @@
-// sseServer.js
 const express = require('express');
 const cors = require('cors');
 
@@ -6,9 +5,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const userConnections = new Map(); // userId -> Set of responses
+const userConnections = new Map();
 
-// SSE subscription endpoint: user connects
 app.get('/stream/:userId', (req, res) => {
   const userId = parseInt(req.params.userId);
   if (isNaN(userId)) return res.sendStatus(400);
@@ -18,7 +16,6 @@ app.get('/stream/:userId', (req, res) => {
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders();
 
-  // Add this res to the user's connection set
   if (!userConnections.has(userId)) {
     userConnections.set(userId, new Set());
   }
@@ -27,7 +24,7 @@ app.get('/stream/:userId', (req, res) => {
 
   console.log(`User ${userId} connected (${connections.size} connections)`);
 
-  // Handle disconnection
+  // handle disconnection
   req.on('close', () => {
     connections.delete(res);
     if (connections.size === 0) {
@@ -37,7 +34,7 @@ app.get('/stream/:userId', (req, res) => {
   });
 });
 
-// Send message to a specific user (to all their tabs)
+// send message to a specific user. all tabs)
 app.post('/send/:userId', (req, res) => {
   const userId = parseInt(req.params.userId);
   if (isNaN(userId)) return res.sendStatus(400);
